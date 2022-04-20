@@ -43,7 +43,7 @@ $classroomTeachers.members | Where-Object { $PSitem.type -eq "GROUP" } | ForEach
 $coursesOwnedByNonTeachers = $allCourses | Where-Object { $teacherEmails -notcontains $PSitem.ownerEmail }
 
 #Add the temporary account instead of deleting just in case we did something wrong.
-$coursesOwnedByNonTeachers | ConvertTo-Csv | & gam csv - gam course ~id add teacher $TempAccount
+$coursesOwnedByNonTeachers | ConvertTo-Csv | & gam csv - gam course ~id add teacher GoogleClassroomCleanup
 
 #Now remove the old owner.
 $coursesOwnedByNonTeachers | ConvertTo-Csv | & gam csv - gam course ~id remove teacher ~ownerEmail
