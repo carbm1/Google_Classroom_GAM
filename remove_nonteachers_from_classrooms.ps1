@@ -45,6 +45,9 @@ $coursesOwnedByNonTeachers = $allCourses | Where-Object { $teacherEmails -notcon
 #Add the temporary account instead of deleting just in case we did something wrong.
 $coursesOwnedByNonTeachers | ConvertTo-Csv | & gam csv - gam course ~id add teacher GoogleClassroomCleanup
 
+#ANOTHER OPTION HERE IT SAY PEOPLE WITH A DIFFERENT DOMAIN SHOULDN'T BE TEACHERS.
+#$coursesOwnedByNonTeachers = $allCourses | Where-Object { $PSItem.ownerEmail -notlike "*@gentrypioneers.com" }
+
 #Now remove the old owner.
 $coursesOwnedByNonTeachers | ConvertTo-Csv | & gam csv - gam course ~id remove teacher ~ownerEmail
 
