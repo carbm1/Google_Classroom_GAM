@@ -1,0 +1,4 @@
+*.csv
+archives\
+temp\
+classrooms.ps1
