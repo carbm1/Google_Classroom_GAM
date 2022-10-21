@@ -14,28 +14,28 @@
 #>
 
 #So you can run this script multiple times we check if the user already exists.
-& gam info user GoogleClassroomCleanup
+& gam.exe info user GoogleClassroomCleanup
 
 if ($LASTEXITCODE -ne 0) {
     #create a new user that will just be a dummy teacher account. You can deal with the password later.
-    & gam create user GoogleClassroomCleanup
+    & gam.exe create user GoogleClassroomCleanup
     #Add it to the classroom_teachers group.
-    & gam update group classroom_teachers add member GoogleClassroomCleanup
+    & gam.exe update group classroom_teachers add member GoogleClassroomCleanup
 }
 
 #We really should get all courses. Including deleted and archived. Otherwise a student could just unarchive and continue to use the course.
-$allCourses = & gam print courses state active fields id,name,owneremail | ConvertFrom-Csv
+$allCourses = & gam.exe print courses state active fields id,name,owneremail | ConvertFrom-Csv
 
 #Backup in case we fubar something.
 $allCourses | Export-Csv ".\classrooms-$(Get-Date -Format "yyyy-MM-dd-HH-mm-ss").csv"
 
 #Lets get the actual classroom_teachers group members. As those classes won't be modified.
-$classroomTeachers = gam info group classroom_teachers formatjson | ConvertFrom-Json
+$classroomTeachers = gam.exe info group classroom_teachers formatjson | ConvertFrom-Json
 $teacherEmails = $classroomTeachers.members | Where-Object { $PSitem.type -eq "USER" } | Select-Object -ExpandProperty email
 
 #account for one level of subgroups.
 $classroomTeachers.members | Where-Object { $PSitem.type -eq "GROUP" } | ForEach-Object {
-    $groupmembers = & gam info group $PSitem.email formatjson | ConvertFrom-Json
+    $groupmembers = & gam.exe info group $PSitem.email formatjson | ConvertFrom-Json
     $teacherEmails += $groupmembers.members | Select-Object -ExpandProperty email
 }
 
@@ -43,13 +43,13 @@ $classroomTeachers.members | Where-Object { $PSitem.type -eq "GROUP" } | ForEach
 $coursesOwnedByNonTeachers = $allCourses | Where-Object { $teacherEmails -notcontains $PSitem.ownerEmail }
 
 #Add the temporary account instead of deleting just in case we did something wrong.
-$coursesOwnedByNonTeachers | ConvertTo-Csv | & gam csv - gam course ~id add teacher GoogleClassroomCleanup
+$coursesOwnedByNonTeachers | ConvertTo-Csv | & gam.exe csv - gam course ~id add teacher GoogleClassroomCleanup
 
 #ANOTHER OPTION HERE IT SAY PEOPLE WITH A DIFFERENT DOMAIN SHOULDN'T BE TEACHERS.
 #$coursesOwnedByNonTeachers = $allCourses | Where-Object { $PSItem.ownerEmail -notlike "*@gentrypioneers.com" }
 
 #Now remove the old owner.
-$coursesOwnedByNonTeachers | ConvertTo-Csv | & gam csv - gam course ~id remove teacher ~ownerEmail
+$coursesOwnedByNonTeachers | ConvertTo-Csv | & gam.exe csv - gam course ~id remove teacher ~ownerEmail
 
 #Now Archive Them.
-$coursesOwnedByNonTeachers | ConvertTo-Csv | & gam csv - gam update course ~id state archived
+$coursesOwnedByNonTeachers | ConvertTo-Csv | & gam.exe csv - gam update course ~id state archived
