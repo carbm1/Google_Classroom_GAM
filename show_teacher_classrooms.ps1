@@ -1,3 +1,13 @@
+<#
+
+    .SYNOPSIS
+    This script will display google classrooms for a teacher.  This can display only active classes if you use the -ActiveOnly parameter.
+
+    .EXAMPLE
+    .\show_teacher_classrooms.ps1 -TeacherEmail cmillsap@gentrypioneers.com -ActiveOnly
+
+#>
+
 Param(
     [Parameter(Mandatory=$True)][string]$TeacherEmail, #The teacher of the classes you want to add the administrator to.
     [Parameter(Mandatory=$False)][switch]$ActiveOnly

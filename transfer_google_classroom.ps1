@@ -1,3 +1,16 @@
+<#
+
+    .SYNOPSIS
+    This script will transfer ownership of a course from one teacher to another.  This may be useful if a teacher leaves mid year.
+    This does require that the original owner account is not suspended.
+
+    .EXAMPLE
+    .\transfer_google_classroom.ps1 -CourseId 512348579874567 -NewOwner jdoe@gentrypioneers.com
+
+    .\transfer_google_classroom.ps1 -SectionID 12345 -NewOwner jdoe@gentrypioneers.com.
+
+#>
+
 Param(
     [Parameter(Mandatory=$False)][string]$CourseId,
     [Parameter(Mandatory=$False)][string]$SectionId,

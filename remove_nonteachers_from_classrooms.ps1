@@ -1,5 +1,6 @@
 <#
 
+    .SYNOPSIS
     This script will create a user called GoogleClassroomCleanup and add them to the classroom_teachers group.
     It will pull all the primary Emails from the classroom_teachers group. Including from 1 subgroup level.
 
@@ -8,8 +9,7 @@
 
     We will keep a record of who owned what class by exporting a CSV file named similar to ".\classrooms-2022-04-20-04-07-32.csv"
 
-    This script is designed around GAMADV-XTD3. Your mileage may vary using the original GAM.
-    https://github.com/taers232c/GAMADV-XTD3
+    This script is designed around GAMADV-XTD3. https://github.com/taers232c/GAMADV-XTD3
 
 #>
 
