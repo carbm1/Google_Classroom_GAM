@@ -14,7 +14,7 @@ Param(
     [Parameter(Mandatory=$false)][switch]$Force
 )
 
-$allActiveClassrooms = & gam.exe print courses state active fields id,name,coursestate,owneremail | ConvertFrom-CSV
+$allActiveClassrooms = & gam.exe print courses state active fields id,name,coursestate,owneremail aliases | ConvertFrom-CSV
 
 Write-Host "Info: Archving list of Active Classrooms:" -ForegroundColor Yellow
 $allActiveClassrooms | Export-CSV ".\ActiveClassrooms-$(Get-Date -Format "yyyy-MM-dd-HH-mm-ss").csv" -Verbose
